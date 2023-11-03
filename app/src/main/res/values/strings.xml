@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CloudMusic-MD3T</string>
+    <string name="login_input">Phone Number / Email</string>
+    <string name="password_input">Password</string>
+    <string name="phone_number_input">Phone Number</string>
+    <string name="use_sms_code">Send SMS Code</string>
+    <string name="verify_code_input">SMS Code</string>
+    <string name="guest_login">Login by Guest</string>
+    <string name="login">Login</string>
+</resources>
