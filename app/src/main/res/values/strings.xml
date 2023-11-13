@@ -3,8 +3,12 @@
     <string name="login_input">Phone Number / Email</string>
     <string name="password_input">Password</string>
     <string name="phone_number_input">Phone Number</string>
-    <string name="use_sms_code">Send SMS Code</string>
+    <string name="use_sms_code">Use SMS Login</string>
     <string name="verify_code_input">SMS Code</string>
     <string name="guest_login">Login by Guest</string>
     <string name="login">Login</string>
+    <string name="sms_string">SMS Code</string>
+    <string name="sms_cd_timer">SMS Sended in %s sec</string>
+    <string name="sms_code_resent">Click to send SMS Code</string>
+    <string name="suggest_title">Suggest Today</string>
 </resources>

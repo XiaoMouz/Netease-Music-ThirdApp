@@ -5,3 +5,11 @@ enum class UserLoginStatus {
     LOGGED_OUT,
     GUEST
 }
+
+enum class UserVIPStatus{
+    MUSIC_PACKAGE,
+    NORMAL,
+    SVIP,
+    SSVIP,
+    OTHER
+}
