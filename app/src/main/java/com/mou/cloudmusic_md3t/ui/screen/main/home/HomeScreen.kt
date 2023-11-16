@@ -20,7 +20,7 @@ import com.mou.cloudmusic_md3t.R
 
 @Composable
 fun HomeScreen() {
-
+    SuggestZone()
 }
 
 @Composable
@@ -31,14 +31,12 @@ fun SuggestCard() {
 @Composable
 fun PrivateRadioCard(){
     Card(modifier = Modifier.size(width = 180.dp, height = 100.dp)) {
-
     }
 }
 
 @Composable
 fun TodaySuggest(){
     Card(modifier = Modifier.size(width = 140.dp, height = 100.dp)) {
-
     }
 }
 

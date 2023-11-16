@@ -1,5 +1,5 @@
-package com.mou.cloudmusic_md3t.ui.screen.main.playlist
+package com.mou.cloudmusic_md3t.ui.screen.main.playing
 
-fun PlayListScreen() {
+fun PlayingScreen() {
 
 }

@@ -19,24 +19,30 @@ import com.mou.cloudmusic_md3t.ui.screen.login.LoginScreen
 import com.mou.cloudmusic_md3t.ui.screen.main.MainNavView
 import com.mou.cloudmusic_md3t.ui.theme.AppTheme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            AppTheme {
-                val appNavController = rememberNavController() // 导航控制器
-                NavHost(navController = appNavController, startDestination = AppRoute.LOGIN_SCREEN){
-                    composable(AppRoute.LOGIN_SCREEN){
-                        LoginScreen(
-                             onLoginSuccess = {
-                                 appNavController.navigate(AppRoute.MAIN_NAV)
-                        })
-                    }
-                    composable(AppRoute.MAIN_NAV){
-                        MainNavView()
-                    }
-                }
+            MainApp()
+        }
+    }
+}
+
+@Composable
+fun MainApp() {
+    val appNavController = rememberNavController()
+    AppTheme {
+        NavHost(navController = appNavController, startDestination = AppRoute.LOGIN_SCREEN){
+            composable(AppRoute.LOGIN_SCREEN){
+                LoginScreen(
+                    onLoginSuccess = {
+                        appNavController.navigate(AppRoute.MAIN_NAV)
+                    })
+            }
+            composable(AppRoute.MAIN_NAV){
+                MainNavView()
             }
         }
     }
