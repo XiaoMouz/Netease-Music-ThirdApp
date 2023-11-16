@@ -46,9 +46,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -61,32 +61,35 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mou.cloudmusic_md3t.R
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    smsSend:()->Unit = {},
-    loginButtonClick:()->Unit = {},
-    onLoginSuccess: ()->Unit = {},
-    allowGuestLogin:Boolean = true,
-    guestLogin: ()->Unit = {}
-    ){
-    val loginViewModel:LoginViewModel = viewModel()
+    smsSend: () -> Unit = {},
+    loginButtonClick: () -> Unit = {},
+    onLoginSuccess: () -> Unit = {},
+    allowGuestLogin: Boolean = true,
+    guestLogin: () -> Unit = {}
+) {
+    val loginViewModel: LoginViewModel = viewModel()
     val context = LocalContext.current
     var loginInput by rememberSaveable { mutableStateOf("") }
     var passwordInput by rememberSaveable { mutableStateOf("") }
     var passwordInputHidden by rememberSaveable { mutableStateOf(true) }
     val useSMSLogin by loginViewModel.useSMS.collectAsState()
-    Box(modifier = Modifier
-        .background(MaterialTheme.colorScheme.background)
-        .fillMaxSize()) {
-        Column(modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+    Box(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(text = "Login",
+            Text(
+                text = "Login",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -113,7 +116,7 @@ fun LoginScreen(
                 modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(useSMSLogin){
+                if (useSMSLogin) {
                     OutlinedTextField(
                         value = passwordInput,
                         onValueChange = { it: String -> passwordInput = it },
@@ -166,15 +169,17 @@ fun LoginScreen(
                     onClick =
                     {
                         loginViewModel.toggleSMS()
-                        if(loginViewModel.smsSendCD.value == 0&&!useSMSLogin) loginViewModel.sendSMS(context)
+                        if (loginViewModel.smsSendCD.value == 0 && !useSMSLogin) loginViewModel.sendSMS(
+                            context
+                        )
                     },
                     label = { Text(stringResource(id = R.string.use_sms_code)) },
                     leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Email,
-                                contentDescription = "",
-                                modifier = Modifier.size(FilterChipDefaults.IconSize)
-                            )
+                        Icon(
+                            imageVector = Icons.Filled.Email,
+                            contentDescription = "",
+                            modifier = Modifier.size(FilterChipDefaults.IconSize)
+                        )
                     },
                     modifier = Modifier.animateContentSize(
                         animationSpec = spring(
@@ -189,26 +194,33 @@ fun LoginScreen(
                             fadeIn(initialAlpha = 0.15f),
                     exit = shrinkVertically(shrinkTowards = Alignment.Top) +
                             fadeOut(targetAlpha = 0.15f)
-                ){
+                ) {
                     SuggestionChip(
                         onClick = {
                             loginViewModel.sendSMS(context)
                         },
                         enabled = loginViewModel.smsSendCD.collectAsState().value == 0,
                         label = {
-                            if(loginViewModel.smsSendCD.collectAsState().value == 0){
+                            if (loginViewModel.smsSendCD.collectAsState().value == 0) {
                                 Text(text = stringResource(id = R.string.sms_code_resent))
-                            }else{
-                                Text(text = stringResource(id = R.string.sms_cd_timer, loginViewModel.smsSendCD.collectAsState().value))
+                            } else {
+                                Text(
+                                    text = stringResource(
+                                        id = R.string.sms_cd_timer,
+                                        loginViewModel.smsSendCD.collectAsState().value
+                                    )
+                                )
                             }
                         },
                         icon = {
-                            if(loginViewModel.smsSendCD.collectAsState().value == 0){
-                                Icon(imageVector = Icons.Filled.Send,
+                            if (loginViewModel.smsSendCD.collectAsState().value == 0) {
+                                Icon(
+                                    imageVector = Icons.Filled.Send,
                                     contentDescription = ""
                                 )
-                            }else{
-                                Icon(imageVector = Icons.Filled.LockClock,
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Filled.LockClock,
                                     contentDescription = ""
                                 )
                             }
@@ -224,12 +236,15 @@ fun LoginScreen(
                         .padding(16.dp)
                         .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    if(allowGuestLogin){
+                    if (allowGuestLogin) {
                         FilledTonalButton(
                             onClick = onLoginSuccess
                         )
                         {
-                            Icon(imageVector = Icons.Default.AccessibleForward, contentDescription = null)
+                            Icon(
+                                imageVector = Icons.Default.AccessibleForward,
+                                contentDescription = null
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = stringResource(id = R.string.guest_login))
                         }
@@ -246,10 +261,11 @@ fun LoginScreen(
 }
 
 fun startCountdown(sec: Int, onTick: (millis: Long) -> Unit, onFinish: () -> Unit) {
-    val timer = object : CountDownTimer((sec*1000).toLong(), 1000) {
+    val timer = object : CountDownTimer((sec * 1000).toLong(), 1000) {
         override fun onTick(millisUntilFinished: Long) {
             onTick(millisUntilFinished)
         }
+
         override fun onFinish() {
             onFinish()
         }
@@ -260,6 +276,6 @@ fun startCountdown(sec: Int, onTick: (millis: Long) -> Unit, onFinish: () -> Uni
 
 @Preview(backgroundColor = 0xFFFFFF)
 @Composable
-fun LoginScreenPreview(){
+fun LoginScreenPreview() {
     LoginScreen()
 }

@@ -28,14 +28,14 @@ class MainActivity : ComponentActivity() {
 fun MainApp() {
     val appNavController = rememberNavController()
     AppTheme {
-        NavHost(navController = appNavController, startDestination = AppRoute.LOGIN_SCREEN){
-            composable(AppRoute.LOGIN_SCREEN){
+        NavHost(navController = appNavController, startDestination = AppRoute.LOGIN_SCREEN) {
+            composable(AppRoute.LOGIN_SCREEN) {
                 LoginScreen(
                     onLoginSuccess = {
                         appNavController.navigate(AppRoute.MAIN_NAV)
                     })
             }
-            composable(AppRoute.MAIN_NAV){
+            composable(AppRoute.MAIN_NAV) {
                 MainNavView()
             }
         }

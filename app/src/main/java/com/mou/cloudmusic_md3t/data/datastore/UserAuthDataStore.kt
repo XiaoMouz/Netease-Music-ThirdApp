@@ -14,7 +14,7 @@ import java.io.IOException
 
 private const val USER_AUTH_PREFERENCES_NAME = "user_auth_preferences"
 
-private val Context.userDataStore : DataStore<Preferences> by preferencesDataStore(name = USER_AUTH_PREFERENCES_NAME)
+private val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(name = USER_AUTH_PREFERENCES_NAME)
 
 /**
  * 用户配置信息 Datastore
@@ -23,17 +23,17 @@ class UserAuthDataStore(context: Context) {
     // 用户 cookies
     private val COOKIES = stringPreferencesKey("cookies")
 
-    val cookiesFlow : Flow<String> = context.userDataStore.data
+    val cookiesFlow: Flow<String> = context.userDataStore.data
         .catch {
-            if( it is IOException){
+            if (it is IOException) {
                 it.printStackTrace()
                 emit(emptyPreferences()) // 清空 preferences
-            }else{
+            } else {
                 throw it
             }
         }
         .map {
-            it[COOKIES]?:"" // 默认值
+            it[COOKIES] ?: "" // 默认值
         }
 
     /**
@@ -41,7 +41,7 @@ class UserAuthDataStore(context: Context) {
      * @param cookies Cookies 内容
      * @param context Context 上下文
      */
-    suspend fun setCookiesToPreferences(cookies: String, context: Context){
+    suspend fun setCookiesToPreferences(cookies: String, context: Context) {
         context.userDataStore.edit { it[COOKIES] = cookies }
     }
 }

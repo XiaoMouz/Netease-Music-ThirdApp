@@ -5,7 +5,7 @@ package com.mou.cloudmusic_md3t.config
  * 应用路由
  */
 object AppRoute {
-    const val LOGIN_SCREEN = "login";
+    const val LOGIN_SCREEN = "login"
     const val MAIN_NAV = "main_nav"
 }
 
@@ -22,7 +22,7 @@ object MainNavRoute {
 /**
  * 详情路由
  */
-object DetailRoute{
+object DetailRoute {
     const val PLAYLIST_DETAIL = "playlist_detail"
     const val ALBUM_DETAIL = "album_detail"
     const val ARTIST_DETAIL = "artist_detail"

@@ -11,11 +11,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayCircleOutline
 import androidx.compose.material3.Card
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,7 +29,7 @@ import com.mou.cloudmusic_md3t.data.music.Song
 
 @Composable
 fun HomeScreen(startPlayList: (Song) -> Unit) {
-    val viewModel:HomeViewModel = viewModel()
+    val viewModel: HomeViewModel = viewModel()
     SuggestZone(startPlayList)
 }
 
@@ -39,21 +39,23 @@ fun SuggestCard() {
 }
 
 @Composable
-fun PrivateRadioCard(){
-    Card(modifier = Modifier
-        .height(height = 120.dp)
-        .fillMaxWidth(0.6f)
+fun PrivateRadioCard() {
+    Card(
+        modifier = Modifier
+            .height(height = 120.dp)
+            .fillMaxWidth(0.6f)
     ) {
     }
 }
 
 @Composable
 fun TodaySuggest(
-    playTodayList:(Song)->Unit
-){
-    Card(modifier = Modifier
-        .height(120.dp)
-        .fillMaxWidth(1f)
+    playTodayList: (Song) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .height(120.dp)
+            .fillMaxWidth(1f)
     ) {
         Column(Modifier.padding(8.dp)) {
             Text(
@@ -77,19 +79,21 @@ fun TodaySuggest(
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(1f),
                 horizontalArrangement = Arrangement.End
-            ){
+            ) {
                 // Circle Button to Play
                 IconButton(
                     onClick = {
-                              playTodayList(PlayableSong(
-                                  1,
-                                  "https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg",
-                                  "test",
-                                  1000)
-                              )
+                        playTodayList(
+                            PlayableSong(
+                                1,
+                                "https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg",
+                                "test",
+                                1000
+                            )
+                        )
                     },
                     modifier = Modifier.background(
                         color = MaterialTheme.colorScheme.primaryContainer,
@@ -101,7 +105,7 @@ fun TodaySuggest(
                         contentDescription = "",
                         tint = MaterialTheme.colorScheme.primary,
 
-                    )
+                        )
                 }
             }
         }
@@ -109,11 +113,12 @@ fun TodaySuggest(
 }
 
 @Composable
-fun SuggestZone(startPlayList:(Song)->Unit){
+fun SuggestZone(startPlayList: (Song) -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(24.dp)) {
+            .padding(24.dp)
+    ) {
         Text(
             text = stringResource(id = R.string.suggest_title),
             style = MaterialTheme.typography.headlineMedium,
@@ -133,15 +138,15 @@ fun SuggestZone(startPlayList:(Song)->Unit){
 
 @Preview(backgroundColor = 0xFFFFFF)
 @Composable
-fun CardPreview(){
-    Row (horizontalArrangement = Arrangement.spacedBy(32.dp)){
+fun CardPreview() {
+    Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
         PrivateRadioCard()
         TodaySuggest({})
     }
 }
 
-@Preview(showBackground = true,backgroundColor = 0xFFFFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
-fun SuggestZonePreview(){
+fun SuggestZonePreview() {
     SuggestZone({})
 }

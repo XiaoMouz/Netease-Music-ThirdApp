@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -70,7 +70,7 @@ fun MainNavView() {
     val navController = rememberNavController()
     val playingStatus = vm.playingStatus.collectAsState()
     val playingSong = vm.playingSong.collectAsState()
-    
+
     Scaffold(
         bottomBar = {
             BottomBar(
@@ -81,7 +81,7 @@ fun MainNavView() {
                 playingSong = playingSong
             )
         }
-    ){
+    ) {
         NavHost(
             navController = navController,
             startDestination = MainNavRoute.HOME,
@@ -92,16 +92,16 @@ fun MainNavView() {
             exitTransition = {
                 ExitTransition.None
             }
-        ){
-            composable(MainNavRoute.HOME){
+        ) {
+            composable(MainNavRoute.HOME) {
                 HomeScreen { song ->
                     vm.insertMusic(song)
                 }
             }
-            composable(MainNavRoute.PLAYING){
+            composable(MainNavRoute.PLAYING) {
                 PlayingScreen()
             }
-            composable(MainNavRoute.ME){
+            composable(MainNavRoute.ME) {
                 MeScreen()
             }
         }
@@ -115,10 +115,10 @@ fun BottomBar(
     clickCallback: (String) -> Unit,
     playingStatus: State<Boolean>,
     playingSong: State<Song>
-              ) {
+) {
 
     Column {
-        if(playingStatus.value&&playingSong.value != EmptySong){
+        if (playingStatus.value && playingSong.value != EmptySong) {
             MusicPlayingBar(playingSong = playingSong.value)
         }
         var selectedItem by remember {
@@ -167,8 +167,7 @@ fun MusicPlayingBar(playingSong: Song) {
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(playingSong.songCoverImageUri)
                     .crossfade(true)
-                    .build()
-                    ,
+                    .build(),
                 contentDescription = "Songs Image",
                 modifier =
                 Modifier
@@ -178,11 +177,11 @@ fun MusicPlayingBar(playingSong: Song) {
                         BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
                         RoundedCornerShape(12.dp)
                     )
-            ){
+            ) {
                 val state = painter.state
-                if(state is AsyncImagePainter.State.Loading){
+                if (state is AsyncImagePainter.State.Loading) {
                     LoadingProgress()
-                }else{
+                } else {
                     SubcomposeAsyncImageContent(
                         contentScale = ContentScale.Crop
                     )
@@ -197,7 +196,7 @@ fun MusicPlayingBar(playingSong: Song) {
             Row {
                 IconButton(onClick = { playingSong.switch() }) {
                     // switch lang
-                    when(playingSong.status.value){
+                    when (playingSong.status.value) {
                         0 -> Icon(Icons.Filled.Downloading, contentDescription = "downloading")
                         1 -> Icon(Icons.Filled.PlayCircle, contentDescription = "playing")
                         2 -> Icon(Icons.Filled.Pause, contentDescription = "pause")
@@ -216,24 +215,38 @@ fun MusicPlayingBar(playingSong: Song) {
 @Preview
 @Composable
 fun MusicPlayingBarPreview() {
-    MusicPlayingBar(playingSong = PlayableSong(1,"https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg", "test", 1000))
+    MusicPlayingBar(
+        playingSong = PlayableSong(
+            1,
+            "https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg",
+            "test",
+            1000
+        )
+    )
 }
 
 @Preview
 @Composable
-fun BottomBarPreview(){
+fun BottomBarPreview() {
     BottomBar(
         clickCallback = {},
         playingStatus = MutableStateFlow(true).collectAsState(),
         playingSong =
-            MutableStateFlow(PlayableSong(1,"https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg", "test", 1000)).collectAsState()
+        MutableStateFlow(
+            PlayableSong(
+                1,
+                "https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg",
+                "test",
+                1000
+            )
+        ).collectAsState()
     )
 }
 
 // 跳转到指定路由，避免多次入栈导致无法一次返回
-fun NavHostController.mainNavTo(route:String){
-    this.navigate(route){
+fun NavHostController.mainNavTo(route: String) {
+    this.navigate(route) {
         popUpTo(this@mainNavTo.graph.findStartDestination().id)
-        launchSingleTop=true
+        launchSingleTop = true
     }
 }

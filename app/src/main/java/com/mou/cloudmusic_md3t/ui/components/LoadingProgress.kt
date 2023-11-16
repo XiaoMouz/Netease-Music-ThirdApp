@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.mou.cloudmusic_md3t.ui.theme.AppTheme
 
 @Composable
-fun LoadingProgress (title:String = "Loading", needTitle:Boolean = true){
+fun LoadingProgress(title: String = "Loading", needTitle: Boolean = true) {
     Column(
         modifier = Modifier
             .background(color = Color.White.copy(alpha = 0.6f))
@@ -27,7 +27,7 @@ fun LoadingProgress (title:String = "Loading", needTitle:Boolean = true){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator()
-        if(needTitle){
+        if (needTitle) {
             Text(text = title, modifier = Modifier.padding(top = 10.dp))
         }
     }
@@ -35,12 +35,13 @@ fun LoadingProgress (title:String = "Loading", needTitle:Boolean = true){
 
 @Preview
 @Composable
-fun LoadingProgressPreview(){
+fun LoadingProgressPreview() {
     AppTheme {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-        ){
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
+        ) {
             LoadingProgress()
         }
     }

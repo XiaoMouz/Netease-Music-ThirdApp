@@ -10,37 +10,37 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel(){
+class LoginViewModel : ViewModel() {
     private var _smsSendCD = MutableStateFlow(0)
-    val smsSendCD : StateFlow<Int> = _smsSendCD
+    val smsSendCD: StateFlow<Int> = _smsSendCD
 
     private var _useSMS = MutableStateFlow(false)
     val useSMS: StateFlow<Boolean> = _useSMS
 
-    private fun startCDTimer(cd: Int = 60){
+    private fun startCDTimer(cd: Int = 60) {
         _smsSendCD.value = cd
         viewModelScope.launch(Dispatchers.IO) {
-            while (_smsSendCD.value > 0){
+            while (_smsSendCD.value > 0) {
                 delay(1000)
                 _smsSendCD.value--
             }
         }
     }
 
-    fun sendSMS(context: Context){
-        if(smsSendCD.value > 0) {
+    fun sendSMS(context: Context) {
+        if (smsSendCD.value > 0) {
             Toast.makeText(context, "SMS Code sended buy not yet (not)", Toast.LENGTH_SHORT).show()
-        }else{
+        } else {
             startCDTimer()
             Toast.makeText(context, "SMS Code sended buy not yet", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun toggleSMS(){
+    fun toggleSMS() {
         _useSMS.value = !useSMS.value
     }
 
-    fun login(phone: String, code: String, isSMS: Boolean){
+    fun login(phone: String, code: String, isSMS: Boolean) {
         Toast.makeText(null, "Login? Not enable LMAO", Toast.LENGTH_SHORT).show()
     }
 }
