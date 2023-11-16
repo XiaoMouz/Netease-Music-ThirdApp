@@ -18,17 +18,18 @@ import androidx.compose.ui.unit.dp
 import com.mou.cloudmusic_md3t.ui.theme.AppTheme
 
 @Composable
-fun LoadingProgress (title:String = "Loading"){
+fun LoadingProgress (title:String = "Loading", needTitle:Boolean = true){
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .background(color = Color.White.copy(alpha = 0.6f))
             .clickable { },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator()
-        Text(text = title, modifier = Modifier.padding(top = 10.dp))
+        if(needTitle){
+            Text(text = title, modifier = Modifier.padding(top = 10.dp))
+        }
     }
 }
 

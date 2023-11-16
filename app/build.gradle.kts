@@ -92,5 +92,6 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.9.3")
 
     // Coil: Load Internet image
-    implementation("io.coil-kt:coil:1.1.1")
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }

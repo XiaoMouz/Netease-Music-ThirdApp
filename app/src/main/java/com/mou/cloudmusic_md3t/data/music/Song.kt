@@ -1,36 +1,68 @@
 package com.mou.cloudmusic_md3t.data.music
 
+import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.core.net.toUri
 
-object SongStatu{
+interface Song{
+    val id: Long
+    val songCoverImageUri: String
+    val name: String
+    val time: Long
+    val status: State<Int>
+
+    fun switch()
+    fun start()
+}
+
+object SongStatus{
     const val LOADING = 0
     const val PLAYING = 1
     const val PAUSE = 2
     const val STOP = 3
 }
+object EmptySong:Song{
+    override val id: Long
+        get() = -1
+    override val songCoverImageUri: String
+        get() = ""
+    override val name: String
+        get() = ""
+    override val time: Long
+        get() = 0
+    override val status: State<Int>
+        get() = mutableIntStateOf(SongStatus.STOP)
 
-class Song(
-    val id: Long,
-    val name: String,
-    val time: Long,
-)
-{
-    private val _status: MutableState<Int> = mutableIntStateOf(SongStatu.LOADING)
-    val status: State<Int> = _status
-    fun switch(){
-        if (_status.value ==  SongStatu.LOADING)
+    override fun switch() {
+    }
+
+    override fun start() {
+    }
+}
+
+data class PlayableSong(
+    override val id: Long,
+    override val songCoverImageUri: String,
+    override val name: String,
+    override val time: Long,
+
+): Song{
+    private val _status: MutableState<Int> = mutableIntStateOf(SongStatus.LOADING)
+    override val status: State<Int> = _status
+    override fun switch(){
+        if (_status.value ==  SongStatus.LOADING)
             return
 
-        if(_status.value == SongStatu.PLAYING)
-            _status.value = SongStatu.PAUSE
+        if(_status.value == SongStatus.PLAYING)
+            _status.value = SongStatus.PAUSE
 
-        if(_status.value == SongStatu.PAUSE || _status.value == SongStatu.STOP)
-            _status.value = SongStatu.PLAYING
+        if(_status.value == SongStatus.PAUSE || _status.value == SongStatus.STOP)
+            _status.value = SongStatus.PLAYING
     }
-    fun start(){
-        if(_status.value == SongStatu.LOADING)
-            _status.value = SongStatu.PLAYING
+    override fun start(){
+        if(_status.value == SongStatus.LOADING)
+            _status.value = SongStatus.PLAYING
     }
 }
