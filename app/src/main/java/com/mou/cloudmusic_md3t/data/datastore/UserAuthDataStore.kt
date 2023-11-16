@@ -1,7 +1,6 @@
 package com.mou.cloudmusic_md3t.data.datastore
 
 import android.content.Context
-import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -15,7 +14,7 @@ import java.io.IOException
 
 private const val USER_AUTH_PREFERENCES_NAME = "user_auth_preferences"
 
-private val Context.userDataStroe : DataStore<Preferences> by preferencesDataStore(name = USER_AUTH_PREFERENCES_NAME)
+private val Context.userDataStore : DataStore<Preferences> by preferencesDataStore(name = USER_AUTH_PREFERENCES_NAME)
 
 /**
  * 用户配置信息 Datastore
@@ -24,7 +23,7 @@ class UserAuthDataStore(context: Context) {
     // 用户 cookies
     private val COOKIES = stringPreferencesKey("cookies")
 
-    val cookiesFlow : Flow<String> = context.userDataStroe.data
+    val cookiesFlow : Flow<String> = context.userDataStore.data
         .catch {
             if( it is IOException){
                 it.printStackTrace()
@@ -43,6 +42,6 @@ class UserAuthDataStore(context: Context) {
      * @param context Context 上下文
      */
     suspend fun setCookiesToPreferences(cookies: String, context: Context){
-        context.userDataStroe.edit { it[COOKIES] = cookies }
+        context.userDataStore.edit { it[COOKIES] = cookies }
     }
 }
