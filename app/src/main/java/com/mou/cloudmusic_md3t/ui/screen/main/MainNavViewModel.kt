@@ -1,5 +1,6 @@
 package com.mou.cloudmusic_md3t.ui.screen.main
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,8 +20,9 @@ class MainNavViewModel:ViewModel() {
     val snapPlayList:StateFlow<List<Song>> = _snapPlayList
 
     // Songs -> todo: auto get from snap playlist
-    // bug: crush in after
-    val playingSong: StateFlow<Song> = MutableStateFlow(_snapPlayList.asStateFlow().value[0])
+    // issue: java.lang.reflect.InvocationTargetException
+    private val _playingSong:MutableStateFlow<Song> = MutableStateFlow(EmptySong)
+    val playingSong:StateFlow<Song> = _playingSong
 
     // Playing status -> todo: auto get from playing song
     private val _playingStatus: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -38,5 +40,11 @@ class MainNavViewModel:ViewModel() {
             _snapPlayList.value.add(0, song)
         else
             _snapPlayList.value.add(_snapPlayList.value.size - 1, song)
+
+        // todo: delete after test
+        _playingSong.value = song
+        _playingSong.value.start()
+        _playingStatus.value = true
+
     }
 }

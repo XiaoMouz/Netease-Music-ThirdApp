@@ -22,6 +22,7 @@ object SongStatus{
     const val PLAYING = 1
     const val PAUSE = 2
     const val STOP = 3
+    const val PENDING = 4
 }
 object EmptySong:Song{
     override val id: Long
@@ -51,6 +52,7 @@ data class PlayableSong(
 ): Song{
     private val _status: MutableState<Int> = mutableIntStateOf(SongStatus.LOADING)
     override val status: State<Int> = _status
+    // todo: loading logic
     override fun switch(){
         if (_status.value ==  SongStatus.LOADING)
             return
@@ -59,10 +61,12 @@ data class PlayableSong(
             _status.value = SongStatus.PAUSE
 
         if(_status.value == SongStatus.PAUSE || _status.value == SongStatus.STOP)
+            // todo: loading logic
             _status.value = SongStatus.PLAYING
     }
     override fun start(){
-        if(_status.value == SongStatus.LOADING)
+        if(_status.value == SongStatus.PENDING || _status.value == SongStatus.STOP)
+            // todo: cache found & loading logic
             _status.value = SongStatus.PLAYING
     }
 }

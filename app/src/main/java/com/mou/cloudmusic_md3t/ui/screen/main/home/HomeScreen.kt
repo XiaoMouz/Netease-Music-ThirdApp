@@ -50,7 +50,10 @@ fun SuggestCard() {
 
 @Composable
 fun PrivateRadioCard(){
-    Card(modifier = Modifier.size(width = 180.dp, height = 100.dp)) {
+    Card(modifier = Modifier
+        .height(height = 120.dp)
+        .fillMaxWidth(0.6f)
+    ) {
     }
 }
 
@@ -58,7 +61,10 @@ fun PrivateRadioCard(){
 fun TodaySuggest(
     playTodayList:(Song)->Unit
 ){
-    Card(modifier = Modifier.size(width = 140.dp, height = 100.dp)) {
+    Card(modifier = Modifier
+        .height(120.dp)
+        .fillMaxWidth(1f)
+    ) {
         Column(Modifier.padding(8.dp)) {
             Text(
                 text = "今日歌单推荐",
@@ -81,21 +87,30 @@ fun TodaySuggest(
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
-            Row (horizontalArrangement = Arrangement.End){
+            Row (
+                modifier = Modifier.fillMaxWidth(1f),
+                horizontalArrangement = Arrangement.End
+            ){
                 // Circle Button to Play
                 IconButton(
                     onClick = {
-                              playTodayList(PlayableSong(1,"https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg", "test", 1000))
+                              playTodayList(PlayableSong(
+                                  1,
+                                  "https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg",
+                                  "test",
+                                  1000)
+                              )
                     },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    ),
-                    modifier = Modifier.clip(CircleShape)
+                    modifier = Modifier.background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = CircleShape
+                    )
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.PlayCircleOutline,
                         contentDescription = "",
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.primary,
+
                     )
                 }
             }
@@ -105,7 +120,10 @@ fun TodaySuggest(
 
 @Composable
 fun SuggestZone(startPlayList:(Song)->Unit){
-    Column(Modifier.padding(16.dp)) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(24.dp)) {
         Text(
             text = stringResource(id = R.string.suggest_title),
             style = MaterialTheme.typography.headlineMedium,

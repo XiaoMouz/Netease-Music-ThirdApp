@@ -1,6 +1,9 @@
 package com.mou.cloudmusic_md3t.ui.screen.main
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,22 +22,29 @@ import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -59,24 +69,34 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun MainNavView() {
     val vm: MainNavViewModel = viewModel()
     val navController = rememberNavController()
+    val playingStatus = vm.playingStatus.collectAsState()
+    val playingSong = vm.playingSong.collectAsState()
     
     Scaffold(
         bottomBar = {
             BottomBar(
                 clickCallback = {
-                    navController.navigate(it)
+                    navController.mainNavTo(it)
                 },
-                playingStatus = vm.playingStatus.collectAsState(),
-                playingSong = vm.playingSong.collectAsState()
+                playingStatus = playingStatus,
+                playingSong = playingSong
             )
         }
     ){
-        NavHost(navController = navController, startDestination = MainNavRoute.HOME, modifier = Modifier.padding(it)){
+        NavHost(
+            navController = navController,
+            startDestination = MainNavRoute.HOME,
+            modifier = Modifier.padding(it),
+            enterTransition = {
+                EnterTransition.None
+            },
+            exitTransition = {
+                ExitTransition.None
+            }
+        ){
             composable(MainNavRoute.HOME){
                 HomeScreen { song ->
                     vm.insertMusic(song)
-
-                    vm.playingSong.value.start()
                 }
             }
             composable(MainNavRoute.PLAYING){
@@ -99,10 +119,12 @@ fun BottomBar(
               ) {
 
     Column {
-        if(playingStatus.value&&playingSong.value!=EmptySong){
+        if(playingStatus.value&&playingSong.value != EmptySong){
             MusicPlayingBar(playingSong = playingSong.value)
         }
-        var selectedItem = MainNavRoute.HOME
+        var selectedItem by remember {
+            mutableStateOf(MainNavRoute.HOME)
+        }
         NavigationBar {
             NavigationBarItem(
                 icon = { Icon(Icons.Filled.Home, contentDescription = "") },
@@ -133,7 +155,10 @@ fun BottomBar(
 
 @Composable
 fun MusicPlayingBar(playingSong: Song) {
-    Surface(modifier = Modifier.fillMaxWidth()) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.secondaryContainer
+    ) {
         Row(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
@@ -149,17 +174,19 @@ fun MusicPlayingBar(playingSong: Song) {
                 modifier =
                 Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(6.dp))
+                    .clip(RoundedCornerShape(12.dp))
                     .border(
-                        BorderStroke(1.dp, MaterialTheme.colorScheme.secondaryContainer),
-                        RoundedCornerShape(6.dp)
+                        BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
+                        RoundedCornerShape(12.dp)
                     )
             ){
                 val state = painter.state
                 if(state is AsyncImagePainter.State.Loading){
                     LoadingProgress()
                 }else{
-                    SubcomposeAsyncImageContent()
+                    SubcomposeAsyncImageContent(
+                        contentScale = ContentScale.Crop
+                    )
                 }
             }
             Text(
@@ -169,7 +196,7 @@ fun MusicPlayingBar(playingSong: Song) {
                 modifier = Modifier.fillMaxWidth(0.6f)
             )
             Row {
-                TextButton(onClick = { playingSong.switch() }) {
+                IconButton(onClick = { playingSong.switch() }) {
                     // switch lang
                     when(playingSong.status.value){
                         0 -> Icon(Icons.Filled.Downloading, contentDescription = "downloading")
@@ -178,7 +205,7 @@ fun MusicPlayingBar(playingSong: Song) {
                         3 -> Icon(Icons.Filled.Stop, contentDescription = "stop")
                     }
                 }
-                TextButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { /*TODO*/ }) {
                     Icon(Icons.Filled.SkipNext, contentDescription = "next")
                 }
             }
@@ -199,8 +226,15 @@ fun BottomBarPreview(){
     BottomBar(
         clickCallback = {},
         playingStatus = MutableStateFlow(true).collectAsState(),
-        playingSong = MutableStateFlow(
-            PlayableSong(1,"https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg", "test", 1000)
-        ).collectAsState()
+        playingSong =
+            MutableStateFlow(PlayableSong(1,"https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg", "test", 1000)).collectAsState()
     )
+}
+
+// 跳转到指定路由，避免多次入栈导致无法一次返回
+fun NavHostController.mainNavTo(route:String){
+    this.navigate(route){
+        popUpTo(this@mainNavTo.graph.findStartDestination().id)
+        launchSingleTop=true
+    }
 }
