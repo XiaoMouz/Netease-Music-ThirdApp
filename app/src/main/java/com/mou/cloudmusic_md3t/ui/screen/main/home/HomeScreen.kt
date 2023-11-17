@@ -41,7 +41,7 @@ fun SuggestCard() {
 @Composable
 fun PrivateRadioCard(){
     Card(modifier = Modifier
-        .height(height = 120.dp)
+        .height(height = 140.dp)
         .fillMaxWidth(0.6f)
     ) {
     }
@@ -52,13 +52,13 @@ fun TodaySuggest(
     playTodayList:(Song)->Unit
 ){
     Card(modifier = Modifier
-        .height(120.dp)
+        .height(140.dp)
         .fillMaxWidth(1f)
     ) {
         Column(Modifier.padding(8.dp)) {
             Text(
-                text = "今日歌单推荐",
-                style = MaterialTheme.typography.bodyMedium,
+                text = stringResource(id = R.string.suggest_today_title),
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -66,16 +66,6 @@ fun TodaySuggest(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxHeight(0.4f)
             ) {
-                Text(
-                    text = "1",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
-                    text = "2",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
             }
             Row (
                 modifier = Modifier.fillMaxWidth(1f),
@@ -91,7 +81,8 @@ fun TodaySuggest(
                                   1000)
                               )
                     },
-                    modifier = Modifier.background(
+                    modifier = Modifier
+                        .background(
                         color = MaterialTheme.colorScheme.primaryContainer,
                         shape = CircleShape
                     )
@@ -100,7 +91,6 @@ fun TodaySuggest(
                         imageVector = Icons.Outlined.PlayCircleOutline,
                         contentDescription = "",
                         tint = MaterialTheme.colorScheme.primary,
-
                     )
                 }
             }
@@ -115,7 +105,7 @@ fun SuggestZone(startPlayList:(Song)->Unit){
             .fillMaxWidth()
             .padding(24.dp)) {
         Text(
-            text = stringResource(id = R.string.suggest_title),
+            text = stringResource(id = R.string.listen_right_now_title),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onBackground
         )

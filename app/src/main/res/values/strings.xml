@@ -10,7 +10,8 @@
     <string name="sms_string">SMS Code</string>
     <string name="sms_cd_timer">SMS Sended in %s sec</string>
     <string name="sms_code_resent">Click to send SMS Code</string>
-    <string name="suggest_title">Suggest Today</string>
+    <string name="listen_right_now_title">Listen right now</string>
+    <string name="suggest_today_title">Today Suggest</string>
 
 
     <string name="home_title">Home</string>
