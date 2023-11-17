@@ -20,7 +20,7 @@ import com.mou.cloudmusic_md3t.ui.theme.AppTheme
 @Composable
 fun LoadingProgress (title:String = "Loading", needTitle:Boolean = true, modifier: Modifier = Modifier){
     Column(
-        modifier = modifier
+        modifier = Modifier
             .background(color = Color.White.copy(alpha = 0.6f))
             .clickable { },
         verticalArrangement = Arrangement.Center,

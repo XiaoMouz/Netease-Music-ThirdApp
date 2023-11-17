@@ -41,7 +41,7 @@ fun SuggestCard() {
 @Composable
 fun PrivateRadioCard(){
     Card(modifier = Modifier
-        .height(height = 140.dp)
+        .height(height = 120.dp)
         .fillMaxWidth(0.6f)
     ) {
     }
@@ -52,13 +52,13 @@ fun TodaySuggest(
     playTodayList:(Song)->Unit
 ){
     Card(modifier = Modifier
-        .height(140.dp)
+        .height(120.dp)
         .fillMaxWidth(1f)
     ) {
         Column(Modifier.padding(8.dp)) {
             Text(
                 text = stringResource(id = R.string.suggest_today_title),
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -81,8 +81,7 @@ fun TodaySuggest(
                                   1000)
                               )
                     },
-                    modifier = Modifier
-                        .background(
+                    modifier = Modifier.background(
                         color = MaterialTheme.colorScheme.primaryContainer,
                         shape = CircleShape
                     )

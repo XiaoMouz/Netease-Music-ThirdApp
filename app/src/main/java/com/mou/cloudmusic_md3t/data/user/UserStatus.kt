@@ -6,7 +6,7 @@ enum class UserLoginStatus {
     GUEST
 }
 
-enum class UserVIPStatus{
+enum class UserVIPStatus {
     MUSIC_PACKAGE,
     NORMAL,
     SVIP,
