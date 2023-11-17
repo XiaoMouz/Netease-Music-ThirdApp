@@ -18,9 +18,9 @@ import androidx.compose.ui.unit.dp
 import com.mou.cloudmusic_md3t.ui.theme.AppTheme
 
 @Composable
-fun LoadingProgress (title:String = "Loading", needTitle:Boolean = true){
+fun LoadingProgress (title:String = "Loading", needTitle:Boolean = true, modifier: Modifier = Modifier){
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(color = Color.White.copy(alpha = 0.6f))
             .clickable { },
         verticalArrangement = Arrangement.Center,

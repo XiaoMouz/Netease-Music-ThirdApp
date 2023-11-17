@@ -1,12 +1,20 @@
 package com.mou.cloudmusic_md3t.ui.screen.main
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.layout.padding
@@ -19,6 +27,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,7 +66,6 @@ import com.mou.cloudmusic_md3t.config.MainNavRoute
 import com.mou.cloudmusic_md3t.data.music.EmptySong
 import com.mou.cloudmusic_md3t.data.music.PlayableSong
 import com.mou.cloudmusic_md3t.data.music.Song
-import com.mou.cloudmusic_md3t.ui.components.LoadingProgress
 import com.mou.cloudmusic_md3t.ui.screen.main.home.HomeScreen
 import com.mou.cloudmusic_md3t.ui.screen.main.me.MeScreen
 import com.mou.cloudmusic_md3t.ui.screen.main.playing.PlayingScreen
@@ -118,9 +127,20 @@ fun BottomBar(
               ) {
 
     Column {
-        if(playingStatus.value&&playingSong.value != EmptySong){
+        val density = LocalDensity.current
+        AnimatedVisibility(
+            visible = playingStatus.value&&playingSong.value != EmptySong,
+            enter = slideInVertically {
+                // Slide in from 40 dp from the top.
+                with(density) {80.dp.roundToPx() }
+            } + fadeIn(
+                initialAlpha = 0.3f
+            ),
+            exit = slideOutVertically() + shrinkVertically() + fadeOut()
+        ) {
             MusicPlayingBar(playingSong = playingSong.value)
         }
+
         var selectedItem by remember {
             mutableStateOf(MainNavRoute.HOME)
         }
@@ -170,21 +190,27 @@ fun MusicPlayingBar(playingSong: Song) {
                     .build()
                     ,
                 contentDescription = "Songs Image",
-                modifier =
-                Modifier
+                modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .border(
-                        BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
-                        RoundedCornerShape(12.dp)
-                    )
             ){
                 val state = painter.state
                 if(state is AsyncImagePainter.State.Loading){
-                    LoadingProgress()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(4.dp)
+                    ){
+                        CircularProgressIndicator()
+                    }
                 }else{
                     SubcomposeAsyncImageContent(
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .border(
+                            BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
+                            RoundedCornerShape(12.dp)
+                            )
                     )
                 }
             }
@@ -230,7 +256,7 @@ fun BottomBarPreview(){
     )
 }
 
-// 跳转到指定路由，避免多次入栈导致无法一次返回
+// Jump to target nav view, and clear all back stack
 fun NavHostController.mainNavTo(route:String){
     this.navigate(route){
         popUpTo(this@mainNavTo.graph.findStartDestination().id)
