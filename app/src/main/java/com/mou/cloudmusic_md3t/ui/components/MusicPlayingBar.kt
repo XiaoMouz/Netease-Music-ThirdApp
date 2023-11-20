@@ -38,8 +38,8 @@ import com.mou.cloudmusic_md3t.data.music.PlayableSong
 import com.mou.cloudmusic_md3t.data.music.Song
 
 
-data class MusicPlayingBarState (
-    val isPlaying:Boolean,
+data class MusicPlayingBarState(
+    val isPlaying: Boolean,
     val song: Song
 )
 
@@ -63,23 +63,22 @@ fun MusicPlayingBar(playingSong: Song) {
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(playingSong.songCoverImageUri)
                     .crossfade(true)
-                    .build()
-                ,
+                    .build(),
                 contentDescription = "Songs Image",
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(12.dp))
-            ){
+            ) {
                 val state = painter.state
-                if(state is AsyncImagePainter.State.Loading){
+                if (state is AsyncImagePainter.State.Loading) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(4.dp)
-                    ){
+                    ) {
                         CircularProgressIndicator()
                     }
-                }else{
+                } else {
                     SubcomposeAsyncImageContent(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -99,7 +98,7 @@ fun MusicPlayingBar(playingSong: Song) {
             Row {
                 IconButton(onClick = { playingSong.switch() }) {
                     // switch lang
-                    when(playingSong.status.value){
+                    when (playingSong.status) {
                         0 -> Icon(Icons.Filled.Downloading, contentDescription = "downloading")
                         1 -> Icon(Icons.Filled.PlayCircle, contentDescription = "playing")
                         2 -> Icon(Icons.Filled.Pause, contentDescription = "pause")
@@ -119,9 +118,11 @@ fun MusicPlayingBar(playingSong: Song) {
 @Composable
 fun MusicPlayingBarPreview() {
     MusicPlayingBar(
-        playingSong = PlayableSong(1,
+        playingSong = PlayableSong(
+            1,
             "https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg",
             "test",
-            1000)
+            1000
+        )
     )
 }

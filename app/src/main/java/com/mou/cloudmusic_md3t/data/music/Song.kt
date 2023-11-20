@@ -9,7 +9,7 @@ interface Song {
     val songCoverImageUri: String
     val name: String
     val time: Long
-    val status: State<Int>
+    val status: Int
 
     fun switch()
     fun start()
@@ -32,8 +32,8 @@ object EmptySong : Song {
         get() = ""
     override val time: Long
         get() = 0
-    override val status: State<Int>
-        get() = mutableIntStateOf(SongStatus.STOP)
+    override val status: Int
+        get() = SongStatus.STOP
 
     override fun switch() {
     }
@@ -49,25 +49,25 @@ data class PlayableSong(
     override val time: Long,
 
     ) : Song {
-    private val _status: MutableState<Int> = mutableIntStateOf(SongStatus.LOADING)
-    override val status: State<Int> = _status
+    private var _status: Int = SongStatus.LOADING
+    override val status: Int = _status
 
     // todo: loading logic
     override fun switch() {
-        if (_status.value == SongStatus.LOADING)
+        if (_status == SongStatus.LOADING)
             return
 
-        if (_status.value == SongStatus.PLAYING)
-            _status.value = SongStatus.PAUSE
+        if (_status == SongStatus.PLAYING)
+            _status = SongStatus.PAUSE
 
-        if (_status.value == SongStatus.PAUSE || _status.value == SongStatus.STOP)
+        if (_status == SongStatus.PAUSE || _status == SongStatus.STOP)
         // todo: loading logic
-            _status.value = SongStatus.PLAYING
+            _status = SongStatus.PLAYING
     }
 
     override fun start() {
-        if (_status.value == SongStatus.PENDING || _status.value == SongStatus.STOP)
+        if (_status == SongStatus.PENDING || _status == SongStatus.STOP)
         // todo: cache found & loading logic
-            _status.value = SongStatus.PLAYING
+            _status = SongStatus.PLAYING
     }
 }

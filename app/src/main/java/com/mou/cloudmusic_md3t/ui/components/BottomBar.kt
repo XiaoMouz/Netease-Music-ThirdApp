@@ -43,10 +43,10 @@ fun BottomBar(
     Column {
         val density = LocalDensity.current
         AnimatedVisibility(
-            visible = playingStatus.value&&playingSong.value != EmptySong,
+            visible = playingStatus.value && playingSong.value != EmptySong,
             enter = slideInVertically {
                 // Slide in from 40 dp from the top.
-                with(density) {80.dp.roundToPx() }
+                with(density) { 80.dp.roundToPx() }
             } + fadeIn(
                 initialAlpha = 0.3f
             ),
@@ -88,11 +88,18 @@ fun BottomBar(
 
 @Preview
 @Composable
-fun BottomBarPreview(){
+fun BottomBarPreview() {
     BottomBar(
         clickCallback = {},
         playingStatus = MutableStateFlow(true).collectAsState(),
         playingSong =
-        MutableStateFlow(PlayableSong(1,"https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg", "test", 1000)).collectAsState()
+        MutableStateFlow(
+            PlayableSong(
+                1,
+                "https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg",
+                "test",
+                1000
+            )
+        ).collectAsState()
     )
 }

@@ -27,7 +27,7 @@ fun MainNavView() {
     val navController = rememberNavController()
     val playingStatus = vm.playingStatus.collectAsState()
     val playingSong = vm.playingSong.collectAsState()
-    
+
     Scaffold(
         bottomBar = {
             BottomBar(
@@ -38,7 +38,7 @@ fun MainNavView() {
                 playingSong = playingSong
             )
         }
-    ){
+    ) {
         NavHost(
             navController = navController,
             startDestination = MainNavRoute.HOME,
@@ -49,16 +49,16 @@ fun MainNavView() {
             exitTransition = {
                 ExitTransition.None
             }
-        ){
-            composable(MainNavRoute.HOME){
+        ) {
+            composable(MainNavRoute.HOME) {
                 HomeScreen { song ->
                     vm.insertMusic(song)
                 }
             }
-            composable(MainNavRoute.PLAYING){
+            composable(MainNavRoute.PLAYING) {
                 PlayingScreen()
             }
-            composable(MainNavRoute.ME){
+            composable(MainNavRoute.ME) {
                 MeScreen()
             }
         }
@@ -69,9 +69,9 @@ fun MainNavView() {
 
 
 // Jump to target nav view, and clear all back stack
-fun NavHostController.mainNavTo(route:String){
-    this.navigate(route){
+fun NavHostController.mainNavTo(route: String) {
+    this.navigate(route) {
         popUpTo(this@mainNavTo.graph.findStartDestination().id)
-        launchSingleTop=true
+        launchSingleTop = true
     }
 }
