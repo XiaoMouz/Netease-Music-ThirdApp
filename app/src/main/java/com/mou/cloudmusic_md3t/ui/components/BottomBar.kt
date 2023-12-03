@@ -27,9 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mou.cloudmusic_md3t.R
 import com.mou.cloudmusic_md3t.config.MainNavRoute
-import com.mou.cloudmusic_md3t.data.music.EmptySong
-import com.mou.cloudmusic_md3t.data.music.PlayableSong
-import com.mou.cloudmusic_md3t.data.music.Song
+import com.mou.cloudmusic_md3t.data.entities.EmptySong
+import com.mou.cloudmusic_md3t.data.entities.PlayableSong
+import com.mou.cloudmusic_md3t.data.entities.Song
 import kotlinx.coroutines.flow.MutableStateFlow
 
 

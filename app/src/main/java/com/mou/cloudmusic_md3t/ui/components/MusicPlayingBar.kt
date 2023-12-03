@@ -11,11 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Downloading
-import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.CloudDownload
+import androidx.compose.material.icons.filled.MotionPhotosPaused
+import androidx.compose.material.icons.filled.PauseCircleOutline
 import androidx.compose.material.icons.filled.PlayCircle
+import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,22 +35,14 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
-import com.mou.cloudmusic_md3t.data.music.PlayableSong
-import com.mou.cloudmusic_md3t.data.music.Song
-
-
-data class MusicPlayingBarState(
-    val isPlaying: Boolean,
-    val song: Song
-)
-
-data class MusicPlayList(
-    val nowPlaying: Song,
-    val list: List<Song>
-)
+import com.mou.cloudmusic_md3t.data.entities.PlayableSong
+import com.mou.cloudmusic_md3t.data.entities.Song
+import com.mou.cloudmusic_md3t.data.entities.SongStatus
 
 @Composable
-fun MusicPlayingBar(playingSong: Song) {
+fun MusicPlayingBar(
+    playingSong: Song
+) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = MaterialTheme.colorScheme.secondaryContainer
@@ -99,10 +92,11 @@ fun MusicPlayingBar(playingSong: Song) {
                 IconButton(onClick = { playingSong.switch() }) {
                     // switch lang
                     when (playingSong.status) {
-                        0 -> Icon(Icons.Filled.Downloading, contentDescription = "downloading")
-                        1 -> Icon(Icons.Filled.PlayCircle, contentDescription = "playing")
-                        2 -> Icon(Icons.Filled.Pause, contentDescription = "pause")
-                        3 -> Icon(Icons.Filled.Stop, contentDescription = "stop")
+                        SongStatus.LOADING -> Icon(Icons.Filled.MotionPhotosPaused, contentDescription = "downloading")
+                        SongStatus.PLAYING -> Icon(Icons.Filled.PauseCircleOutline, contentDescription = "playing")
+                        SongStatus.PAUSE -> Icon(Icons.Filled.PlayCircle, contentDescription = "pause")
+                        SongStatus.STOP -> Icon(Icons.Filled.Replay, contentDescription = "stop")
+                        SongStatus.PENDING -> Icon(Icons.Filled.CloudDownload, contentDescription = "pending")
                     }
                 }
                 IconButton(onClick = { /*TODO*/ }) {

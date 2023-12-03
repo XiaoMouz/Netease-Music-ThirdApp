@@ -24,8 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mou.cloudmusic_md3t.R
-import com.mou.cloudmusic_md3t.data.music.PlayableSong
-import com.mou.cloudmusic_md3t.data.music.Song
+import com.mou.cloudmusic_md3t.data.entities.PlayableSong
+import com.mou.cloudmusic_md3t.data.entities.Song
 
 @Composable
 fun HomeScreen(startPlayList: (Song) -> Unit) {
@@ -74,7 +74,8 @@ fun TodaySuggest(
                 // Circle Button to Play
                 IconButton(
                     onClick = {
-                              playTodayList(PlayableSong(
+                              playTodayList(
+                                  PlayableSong(
                                   1,
                                   "https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg",
                                   "test",

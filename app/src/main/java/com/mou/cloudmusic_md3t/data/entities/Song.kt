@@ -1,26 +1,22 @@
-package com.mou.cloudmusic_md3t.data.music
-
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableIntStateOf
+package com.mou.cloudmusic_md3t.data.entities
 
 interface Song {
     val id: Long
     val songCoverImageUri: String
     val name: String
     val time: Long
-    val status: Int
+    val status: SongStatus
 
     fun switch()
     fun start()
 }
 
-object SongStatus {
-    const val LOADING = 0
-    const val PLAYING = 1
-    const val PAUSE = 2
-    const val STOP = 3
-    const val PENDING = 4
+enum class SongStatus {
+    LOADING,
+    PLAYING,
+    PAUSE,
+    STOP,
+    PENDING
 }
 
 object EmptySong : Song {
@@ -32,7 +28,7 @@ object EmptySong : Song {
         get() = ""
     override val time: Long
         get() = 0
-    override val status: Int
+    override val status: SongStatus
         get() = SongStatus.STOP
 
     override fun switch() {
@@ -49,8 +45,8 @@ data class PlayableSong(
     override val time: Long,
 
     ) : Song {
-    private var _status: Int = SongStatus.LOADING
-    override val status: Int = _status
+    private var _status: SongStatus = SongStatus.LOADING
+    override val status: SongStatus = _status
 
     // todo: loading logic
     override fun switch() {
