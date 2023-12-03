@@ -1,10 +1,11 @@
-package com.mou.cloudmusic_md3t.data.remote.neteaseapi
+package com.mou.cloudmusic_md3t.api.data
 
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 // todo: return type waiting for Dto
-interface LoginApi {
+
+interface LoginApiService {
     // Guest login
     @GET("register/anonimous")
     suspend fun guestLogin():String
