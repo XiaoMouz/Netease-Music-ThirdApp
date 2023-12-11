@@ -8,8 +8,9 @@
     <string name="guest_login">Login by Guest</string>
     <string name="login">Login</string>
     <string name="sms_string">SMS Code</string>
-    <string name="sms_cd_timer">SMS Sended in %s sec</string>
+    <string name="sms_cd_timer">Sent SMS in %s sec</string>
     <string name="sms_code_resent">Click to send SMS Code</string>
+    <string name="sms_send_toast">Sent SMS, check you message.</string>
     <string name="listen_right_now_title">Listen right now</string>
     <string name="suggest_today_title">Today Suggest</string>
 

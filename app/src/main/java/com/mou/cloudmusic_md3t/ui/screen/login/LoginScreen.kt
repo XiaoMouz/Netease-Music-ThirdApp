@@ -73,10 +73,9 @@ fun LoginScreen(
 ) {
     val loginViewModel: LoginViewModel = viewModel()
     val context = LocalContext.current
-    var loginInput by rememberSaveable { mutableStateOf("") }
-    var passwordInput by rememberSaveable { mutableStateOf("") }
     var passwordInputHidden by rememberSaveable { mutableStateOf(true) }
-    val useSMSLogin by loginViewModel.useSMS.collectAsState()
+    val loginState = loginViewModel.loginState.collectAsState().value
+    val inputState = loginViewModel.inputState.collectAsState().value
     Box(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
@@ -99,8 +98,8 @@ fun LoginScreen(
             ) {
 
                 OutlinedTextField(
-                    value = loginInput,
-                    onValueChange = { it: String -> loginInput = it },
+                    value = inputState.username,
+                    onValueChange = { loginViewModel.handleIntent(LoginIntent.InputUsernameState(it)) },
                     label = { Text(text = stringResource(id = R.string.login_input)) },
                     singleLine = true,
                     leadingIcon = {
@@ -116,10 +115,10 @@ fun LoginScreen(
                 modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (useSMSLogin) {
+                if (loginState.loginMethod == LoginMethod.SMS) {
                     OutlinedTextField(
-                        value = passwordInput,
-                        onValueChange = { it: String -> passwordInput = it },
+                        value = inputState.password,
+                        onValueChange = { loginViewModel.handleIntent(LoginIntent.InputPasswordState(it)) },
                         label = { Text(text = stringResource(id = R.string.sms_string)) },
                         singleLine = true,
                         leadingIcon = {
@@ -132,8 +131,8 @@ fun LoginScreen(
                     )
                 } else {
                     OutlinedTextField(
-                        value = passwordInput,
-                        onValueChange = { it: String -> passwordInput = it },
+                        value = inputState.password,
+                        onValueChange = { loginViewModel.handleIntent(LoginIntent.InputPasswordState(it)) },
                         label = { Text(text = stringResource(id = R.string.password_input)) },
                         visualTransformation =
                         if (passwordInputHidden) PasswordVisualTransformation() else VisualTransformation.None,
@@ -165,13 +164,14 @@ fun LoginScreen(
                 verticalAlignment = Alignment.Bottom
             ) {
                 ElevatedFilterChip(
-                    selected = useSMSLogin,
+                    selected = loginState.loginMethod == LoginMethod.SMS,
                     onClick =
                     {
-                        loginViewModel.toggleSMS()
-                        if (loginViewModel.smsSendCD.value == 0 && !useSMSLogin) loginViewModel.sendSMS(
-                            context
-                        )
+                        if(loginState.loginMethod == LoginMethod.SMS){
+                            loginViewModel.handleIntent(LoginIntent.ChangeLoginMethod(LoginMethod.PASSWORD))
+                        }else{
+                            loginViewModel.handleIntent(LoginIntent.ChangeLoginMethod(LoginMethod.SMS))
+                        }
                     },
                     label = { Text(stringResource(id = R.string.use_sms_code)) },
                     leadingIcon = {
@@ -189,7 +189,7 @@ fun LoginScreen(
                     )
                 )
                 AnimatedVisibility(
-                    visible = useSMSLogin,
+                    visible = loginState.loginMethod == LoginMethod.SMS,
                     enter = expandVertically(expandFrom = Alignment.Top) +
                             fadeIn(initialAlpha = 0.15f),
                     exit = shrinkVertically(shrinkTowards = Alignment.Top) +
@@ -197,23 +197,23 @@ fun LoginScreen(
                 ) {
                     SuggestionChip(
                         onClick = {
-                            loginViewModel.sendSMS(context)
+                            loginViewModel.handleIntent(LoginIntent.SendSMS(context, inputState.phone))
                         },
-                        enabled = loginViewModel.smsSendCD.collectAsState().value == 0,
+                        enabled = loginState.smsSentState == SMSSentState.IDLE,
                         label = {
-                            if (loginViewModel.smsSendCD.collectAsState().value == 0) {
+                            if (loginState.smsSentState == SMSSentState.IDLE) {
                                 Text(text = stringResource(id = R.string.sms_code_resent))
                             } else {
                                 Text(
                                     text = stringResource(
                                         id = R.string.sms_cd_timer,
-                                        loginViewModel.smsSendCD.collectAsState().value
+                                        loginState.smsTimer
                                     )
                                 )
                             }
                         },
                         icon = {
-                            if (loginViewModel.smsSendCD.collectAsState().value == 0) {
+                            if (loginState.smsSentState == SMSSentState.IDLE) {
                                 Icon(
                                     imageVector = Icons.Filled.Send,
                                     contentDescription = ""
