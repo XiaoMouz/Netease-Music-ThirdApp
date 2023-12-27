@@ -83,6 +83,6 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun login(phone: String, code: String, isSMS: Boolean) {
-        Toast.makeText(null, "Login? Not enable LMAO", Toast.LENGTH_SHORT).show()
+        Toast.makeText(null, "Login in WIP", Toast.LENGTH_SHORT).show()
     }
 }

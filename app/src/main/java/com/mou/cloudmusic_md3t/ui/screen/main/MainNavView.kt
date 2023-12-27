@@ -19,22 +19,27 @@ import com.mou.cloudmusic_md3t.ui.screen.main.home.HomeScreen
 import com.mou.cloudmusic_md3t.ui.screen.main.me.MeScreen
 import com.mou.cloudmusic_md3t.ui.screen.main.playing.PlayingScreen
 
-
 @Composable
 fun MainNavView() {
-    val vm: MainNavViewModel = viewModel()
+    val viewModel: MainNavViewModel = viewModel()
+    val navList = viewModel.navList
     val navController = rememberNavController()
-    val playingStatus = vm.playingStatus.collectAsState()
-    val playingSong = vm.playingSong.collectAsState()
+    val bottomBarState = viewModel.bottomBarState.collectAsState().value
+    val musicBarState = viewModel
+        .musicBarState.collectAsState().value
 
     Scaffold(
         bottomBar = {
             BottomBar(
-                clickCallback = {
-                    navController.mainNavTo(it)
+                bottomBarState,
+                musicBarState,
+                changeNavBottomIndex = { index ->
+                    viewModel.intentHandler(MainNavIntent.ChangeNavBottomIndex(index))
+                    when(index){
+                        0 -> navController.mainNavTo(MainNavRoute.HOME)
+                        1 -> navController.mainNavTo(MainNavRoute.ME)
+                    }
                 },
-                playingStatus = playingStatus,
-                playingSong = playingSong
             )
         }
     ) {
@@ -51,7 +56,7 @@ fun MainNavView() {
         ) {
             composable(MainNavRoute.HOME) {
                 HomeScreen { song ->
-                    vm.insertMusic(song)
+                    viewModel.intentHandler(MainNavIntent.ChangeMusicState(true, song))
                 }
             }
             composable(MainNavRoute.PLAYING) {

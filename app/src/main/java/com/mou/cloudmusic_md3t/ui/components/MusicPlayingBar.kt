@@ -38,10 +38,11 @@ import coil.request.ImageRequest
 import com.mou.cloudmusic_md3t.data.entities.PlayableSong
 import com.mou.cloudmusic_md3t.data.entities.Song
 import com.mou.cloudmusic_md3t.data.entities.SongStatus
+import com.mou.cloudmusic_md3t.ui.screen.main.MusicBarState
 
 @Composable
 fun MusicPlayingBar(
-    playingSong: Song
+    musicBarState: MusicBarState
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -54,7 +55,7 @@ fun MusicPlayingBar(
         ) {
             SubcomposeAsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(playingSong.songCoverImageUri)
+                    .data(musicBarState.song.songCoverImageUri)
                     .crossfade(true)
                     .build(),
                 contentDescription = "Songs Image",
@@ -83,15 +84,15 @@ fun MusicPlayingBar(
                 }
             }
             Text(
-                text = playingSong.name,
+                text = musicBarState.song.name,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.fillMaxWidth(0.6f)
             )
             Row {
-                IconButton(onClick = { playingSong.switch() }) {
+                IconButton(onClick = { musicBarState.song.switch() }) {
                     // switch lang
-                    when (playingSong.status) {
+                    when (musicBarState.song.status) {
                         SongStatus.LOADING -> Icon(Icons.Filled.MotionPhotosPaused, contentDescription = "downloading")
                         SongStatus.PLAYING -> Icon(Icons.Filled.PauseCircleOutline, contentDescription = "playing")
                         SongStatus.PAUSE -> Icon(Icons.Filled.PlayCircle, contentDescription = "pause")
@@ -112,11 +113,6 @@ fun MusicPlayingBar(
 @Composable
 fun MusicPlayingBarPreview() {
     MusicPlayingBar(
-        playingSong = PlayableSong(
-            1,
-            "https://gitee.com/xiaomouz/xiaomouz/raw/master/upload/images/06bcb167ff840.jpg",
-            "test",
-            1000
-        )
+        MusicBarState()
     )
 }

@@ -1,6 +1,5 @@
 package com.mou.cloudmusic_md3t.ui.screen.login
 
-import android.os.CountDownTimer
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -65,11 +64,8 @@ import com.mou.cloudmusic_md3t.R
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    smsSend: () -> Unit = {},
-    loginButtonClick: () -> Unit = {},
     onLoginSuccess: () -> Unit = {},
     allowGuestLogin: Boolean = true,
-    guestLogin: () -> Unit = {}
 ) {
     val loginViewModel: LoginViewModel = viewModel()
     val context = LocalContext.current
@@ -259,20 +255,6 @@ fun LoginScreen(
         }
     }
 }
-
-fun startCountdown(sec: Int, onTick: (millis: Long) -> Unit, onFinish: () -> Unit) {
-    val timer = object : CountDownTimer((sec * 1000).toLong(), 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            onTick(millisUntilFinished)
-        }
-
-        override fun onFinish() {
-            onFinish()
-        }
-    }
-    timer.start()
-}
-
 
 @Preview(backgroundColor = 0xFFFFFF)
 @Composable
